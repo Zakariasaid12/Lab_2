@@ -1,0 +1,53 @@
+<project name="Lab_2" default="build" basedir=".">
+    <description>Builds, tests, and runs the project Lab_2.</description>
+
+    <!-- Define directories -->
+    <property name="src.dir" value="src/main/java"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="webapp.dir" value="src/main/webapp"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Clean task -->
+    <target name="clean">
+        <echo>Cleaning build and dist directories...</echo>
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+
+    <!-- Compile task -->
+    <target name="compile">
+        <echo>Compiling Java source files...</echo>
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${src.dir}" destdir="${classes.dir}">
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Build task -->
+    <target name="build" depends="clean, compile">
+        <echo>Building the project...</echo>
+        <mkdir dir="${dist.dir}" />
+        <copy todir="${dist.dir}">
+            <fileset dir="${webapp.dir}" />
+        </copy>
+    </target>
+
+    <!-- Run task -->
+    <target name="run" depends="build">
+        <echo>Running the web application...</echo>
+        <java classname="com.example.servlet.IndyWinnerServlet" fork="true">
+            <classpath>
+                <path path="${classes.dir}" />
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+</project>
